@@ -2,15 +2,19 @@ name: wordle
 version: '0.0.1'
 dependencies:
   - base
+  - ansi-terminal
+  - random
+  - containers
 
 executables:
-  xchg-server:
+  wordle:
     main: Main.hs
-      #other-modules:
+    other-modules:
+      - Options
+      - Paths_wordle
 
     ghc-options:
       - -Wall
-      - -Werror
       - -threaded
       - -rtsopts
       - -with-rtsopts=-N
