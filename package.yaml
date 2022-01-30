@@ -1,0 +1,16 @@
+name: wordle
+version: '0.0.1'
+dependencies:
+  - base
+
+executables:
+  xchg-server:
+    main: Main.hs
+      #other-modules:
+
+    ghc-options:
+      - -Wall
+      - -Werror
+      - -threaded
+      - -rtsopts
+      - -with-rtsopts=-N
