@@ -4,11 +4,17 @@
 module Options where
 
 import Data.List (foldl')
-import Paths_wordle
+import Paths_wordle (getDataFileName)
 import System.Console.GetOpt
+  ( ArgDescr (NoArg, ReqArg),
+    ArgOrder (Permute),
+    OptDescr (..),
+    getOpt,
+    usageInfo,
+  )
 import System.Environment (getArgs)
-import System.Exit
-import System.IO
+import System.Exit (exitFailure)
+import System.IO (hPutStr, hPutStrLn, stderr)
 
 data Options a = Options
   { optDictionary :: a,
@@ -97,16 +103,14 @@ getOptions = do
           }
 
   case getOpt Permute optDescriptions args of
-    (_, _, es) | not (null es) ->
-      do
-        mapM_ (hPutStrLn stderr) es
-        usage
-    (fs, ms, _) ->
-      do
-        let opts m = foldl' (\x f -> f x) (o0 m) fs
-        opts' <- case ms of
-          "solve" : start -> pure (opts (Solve start))
-          ["play"] -> pure (opts Play)
-          ["give"] -> pure (opts Give)
-          _ -> usage
-        traverse (fmap lines . readFile) opts'
+    (_, _, es) | not (null es) -> do
+      mapM_ (hPutStrLn stderr) es
+      usage
+    (fs, ms, _) -> do
+      let opts m = foldl' (\x f -> f x) (o0 m) fs
+      opts' <- case ms of
+        "solve" : start -> pure (opts (Solve start))
+        ["play"] -> pure (opts Play)
+        ["give"] -> pure (opts Give)
+        _ -> usage
+      traverse (fmap lines . readFile) opts'
