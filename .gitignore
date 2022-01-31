@@ -24,3 +24,6 @@ cabal.project.local~
 result
 *.cabal
 *node_modules/
+play.txt
+all.txt
+.vscode
